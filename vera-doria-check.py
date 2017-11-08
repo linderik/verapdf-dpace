@@ -7,10 +7,7 @@ import xml.dom.minidom
 import subprocess
 import sys
 
-# parsin command line arguments
-
-
-# stats = dict()
+stats = dict()
 result = [0, 0]
 url = 'http://doria.fi/oai/request'
 counter = 0
@@ -18,16 +15,21 @@ counter = 0
 
 def check_pdf(pdf_file):
     # starts vera to check the pdf file. Verapdf then stores an xml file with the reults
-    subprocess.call(['~/verapdf/verapdf', pdf_file, '--format', 'xml', '>', 'result.xml'])
-
+    output = subprocess.check_output(['sh', '/root/verapdf/verapdf', pdf_file, '--format', 'xml', '--maxfailures', '3'])
+    f = open("result.xml", "w")
+    f.write(output)
+    f.close()
+    print("Created result.xml!")
 
 def parse_result():
     # parses output xml from verapdf and stores error in result dictionary
     xml_file = xml.dom.minidom.parse('result.xml')
     report_tag = xml_file.getElementsByTagName('validationReports')[0]
     if report_tag.getAttribute('compliant') == '1':
+        print("Compliant File")
         return True
     elif report_tag.getAttribute('compliant') == '0' and report_tag.getAttribute('nonCompliant') == '1':
+        print("Non Compliant File")
         return False
     else:
         print('Error: XML result tag not found!')
@@ -36,6 +38,7 @@ def parse_result():
 
 def store_result(passed):
     # writes result dictionary to output.pdf
+    print("storing result")
     if passed:
         result[0] = result[0] + 1
     else:
@@ -43,15 +46,18 @@ def store_result(passed):
 
 
 def write_stats():
-    open('result.txt', 'w').write('Passed: ' + result[0] + '; Failed: ' + result[1])
+    print("wrtiting txt")
+    open('result.txt', 'w').write('Passed: ' + str(result[0]) + '; Failed: ' + str(result[1]))
 
 
 # download all identifiers from dspace
 items = oai_ListIdentifiers(url)  # The second argument is the collection or community id :-)
 for orig_id, orig_ts in items.iteritems():
+    print("diving into loop")
     counter += 1
-    if counter == 5:
-        break
+    #if counter == 10:
+    #    print("Max number of iterations reached!")
+    #    break
     kk = oai_GetRecord(url, orig_id, 'kk')
     dom_kk = xml.dom.minidom.parseString(kk)
 

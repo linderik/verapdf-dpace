@@ -97,7 +97,7 @@ def get_tokenized_url_nr(p_baseurl, p_verb):
 					rtoken = rtoken.replace("ListIdentifiers|cursor", "ListIdentifiers|metadataPrefix$oai_dc|cursor")
 					
 					if len(rtoken) > 0:
-						if p_n < 1:
+						if p_n < MAX_RTOKENS:
 							continue_list = True
 
 	return pages_list
