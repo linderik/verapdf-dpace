@@ -10,16 +10,28 @@ import sys
 stats = dict()
 result = [0, 0]
 url = 'http://doria.fi/oai/request'
-counter = 0
+
+def get_file_list(id):
+    kk = oai_GetRecord(url, id, 'kk')
+    dom_kk = xml.dom.minidom.parseString(kk)
+
+    return dom_kk.getElementsByTagName('kk:file')
+
+
+def download_file(file_element):
+    link = file_element.getAttribute('href')
+
+    return get_url(str2url(link))
 
 
 def check_pdf(pdf_file):
     # starts vera to check the pdf file. Verapdf then stores an xml file with the reults
-    output = subprocess.check_output(['sh', '/root/verapdf/verapdf', pdf_file, '--format', 'xml', '--maxfailures', '3'])
+    output = subprocess.check_output(['sh', '/home/merioksa/Software/verapdf/verapdf', pdf_file, '--format', 'xml', '--maxfailures', '3'])
     f = open("result.xml", "w")
     f.write(output)
     f.close()
     print("Created result.xml!")
+
 
 def parse_result():
     # parses output xml from verapdf and stores error in result dictionary
@@ -46,49 +58,45 @@ def store_result(passed):
 
 
 def write_stats():
-    print("wrtiting txt")
+    print("writing txt")
     open('result.txt', 'w').write('Passed: ' + str(result[0]) + '; Failed: ' + str(result[1]))
 
 
-# download all identifiers from dspace
-items = oai_ListIdentifiers(url)  # The second argument is the collection or community id :-)
-for orig_id, orig_ts in items.iteritems():
-    print("diving into loop")
-    counter += 1
-    #if counter == 10:
-    #    print("Max number of iterations reached!")
-    #    break
-    kk = oai_GetRecord(url, orig_id, 'kk')
-    dom_kk = xml.dom.minidom.parseString(kk)
+def check_database():
+    counter = 0
 
-    # Check the metadata. If it's empty, it means the item is probably deleted from the dspace instance
-    fields = dom_kk.getElementsByTagName('kk:field')
-    if len(fields) == 0:
-        print("No metadata found, item (probably) deleted" + orig_id)
-        continue
+    # download all identifiers from dspace
+    items = oai_ListIdentifiers(url)  # The second (optional) argument is the collection or community id :-)
+    for orig_id, orig_ts in items.iteritems():
+        print("diving into loop")
+        counter += 1
+        if counter == 10:
+            print("Max number of iterations reached!")
+            break
 
-    elems = dom_kk.getElementsByTagName('kk:file')
+        elems = get_file_list(orig_id)
 
-    # Check that we have some files. If not, log error
-    if len(elems) > 0:
-        # Fetch the actual files (pdfs etc)
+        # Check that we have some files. If not, log error
+        if len(elems) > 0:
+            # Fetch the actual files (pdfs etc)
+            for elem in elems:
+                content = download_file(elem)
 
-        filename_list = []
-        for elem in elems:
-            link = elem.getAttribute('href')
-            filename = str_after_last(link, '/')
-            filename = str_before_last(filename, '?')
-            filename_list.append(filename)
+                if content is None:
+                    # Something went wrong!!
+                    print("Could not download all files" + orig_id)
+                else:
+                    write_file(content, 'temp.pdf')
 
-            content = get_url(str2url(link))
+                    # Super simple file type check. Is this enough?
+                    filetype = subprocess.check_output(['file', 'temp.pdf'])
+                    if 'PDF' in filetype:
+                        check_pdf('temp.pdf')
+                        store_result(parse_result())
+                    else:
+                        print("That's not a PDF!")
 
-            if content is None:
-                # Something went wrong, abort!!
-                print("Could not download all files" + orig_id)
-                break  # Do not handle this item anymore
-            else:
-                write_file(content, 'temp.pdf')
-                check_pdf('temp.pdf')
-                store_result(parse_result())
+    write_stats()
 
-write_stats()
+if __name__ == "__main__":
+    check_database()

@@ -1,0 +1,5 @@
+.idea/
+*.pyc
+result.txt
+result.xml
+temp.pdf
