@@ -34,10 +34,10 @@ def get_url(p_url):
 	url = p_url
 	try:
 		url = url.decode("utf-8", "strict")
-		print('success')
+		#print('success')
 	except UnicodeEncodeError, e:
 		url = unicodedata.normalize('NFC', url).encode('utf-8')
-		print('fail')
+		#print('fail')
 	request = urllib2.Request(url, None, headers)
 	data = None
 

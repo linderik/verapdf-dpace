@@ -9,7 +9,9 @@ import sys
 
 stats = dict()
 result = [0, 0]
-url = 'http://doria.fi/oai/request'
+url = 'http://doria.fi/oai/request' # The dspace to harvest. Modify as needed.
+vera = '/home/merioksa/Software/verapdf/verapdf' # MODIFY THIS! Needs to point at the actual verapdf script
+
 
 def get_file_list(id):
     kk = oai_GetRecord(url, id, 'kk')
@@ -25,23 +27,31 @@ def download_file(file_element):
 
 
 def check_pdf(pdf_file):
-    # starts vera to check the pdf file. Verapdf then stores an xml file with the reults
-    output = subprocess.check_output(['sh', '/home/merioksa/Software/verapdf/verapdf', pdf_file, '--format', 'xml', '--maxfailures', '3'])
+    # Runs vera to check the pdf file, then stores an xml file with the reults
+    print("Running verapdf")
+    output = subprocess.check_output(['sh', vera, pdf_file, '--format', 'xml', '--maxfailures', '3'])
     f = open("result.xml", "w")
     f.write(output)
     f.close()
-    print("Created result.xml!")
 
 
 def parse_result():
     # parses output xml from verapdf and stores error in result dictionary
+    print("Parsing results...")
     xml_file = xml.dom.minidom.parse('result.xml')
     report_tag = xml_file.getElementsByTagName('validationReports')[0]
     if report_tag.getAttribute('compliant') == '1':
         print("Compliant File")
         return True
     elif report_tag.getAttribute('compliant') == '0' and report_tag.getAttribute('nonCompliant') == '1':
-        print("Non Compliant File")
+        print("Non Compliant File, Errors:")
+
+        assertions = xml_file.getElementsByTagName('assertion')
+        for assertion in assertions:
+            msg = assertion.getElementsByTagName('message')[0].firstChild.nodeValue
+            print "- " + msg
+
+
         return False
     else:
         print('Error: XML result tag not found!')
@@ -49,8 +59,7 @@ def parse_result():
 
 
 def store_result(passed):
-    # writes result dictionary to output.pdf
-    print("storing result")
+    # Save result of latest check
     if passed:
         result[0] = result[0] + 1
     else:
@@ -58,21 +67,19 @@ def store_result(passed):
 
 
 def write_stats():
-    print("writing txt")
-    open('result.txt', 'w').write('Passed: ' + str(result[0]) + '; Failed: ' + str(result[1]))
+    print("Results:")
+    res = 'Passed: ' + str(result[0]) + '; Failed: ' + str(result[1])
+    print res
+    open('result.txt', 'w').write(res)
 
 
 def check_database():
     counter = 0
 
-    # download all identifiers from dspace
+    # Download all identifiers from dspace
     items = oai_ListIdentifiers(url)  # The second (optional) argument is the collection or community id :-)
     for orig_id, orig_ts in items.iteritems():
-        print("diving into loop")
-        counter += 1
-        if counter == 10:
-            print("Max number of iterations reached!")
-            break
+        print("===================================================================")
 
         elems = get_file_list(orig_id)
 
@@ -95,8 +102,17 @@ def check_database():
                         store_result(parse_result())
                     else:
                         print("That's not a PDF!")
+        else:
+            print("No files found!")
 
+        counter += 1
+        if counter == 50:
+            print("Max number of iterations reached!")
+            break
+
+    print("===================================================================")
     write_stats()
+
 
 if __name__ == "__main__":
     check_database()
