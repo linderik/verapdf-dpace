@@ -14,12 +14,11 @@ args = parser.parse_args()
 print(args.vera)
 
 if args.vera:
-    if args.vera == merioksa:
+    if args.vera == "merioksa":
         vera = '/home/merioksa/Software/verapdf/verapdf'
     else:
          vera = args.vera
 else:
-     print("please specify verapdf installation folder")
      sys.exit("please specify verapdf installation folder")
 
 
