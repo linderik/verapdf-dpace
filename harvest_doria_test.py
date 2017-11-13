@@ -10,18 +10,18 @@ from f_xml import *
 import xml.dom.minidom
 
 URL_OAIBASE = 'http://www.doria.fi/oai/request'
-#URL_OAIBASE = URL_OAIBASE.strip('\'"')
-#change!!!
-#DIR = 'C:\HY-Data\LINDERIK\doria_harvest_testi\temp\\'
-#DIR_LOGFILE = 'C:\HY-Data\LINDERIK\doria_harvest_testi\\temp\log\\'
+# URL_OAIBASE = URL_OAIBASE.strip('\'"')
+# change!!!
+# DIR = 'C:\HY-Data\LINDERIK\doria_harvest_testi\temp\\'
+# DIR_LOGFILE = 'C:\HY-Data\LINDERIK\doria_harvest_testi\\temp\log\\'
 DIR = 'C:/HY-Data/LINDERIK/doria_harvest_testi/temp'
 DIR_LOGFILE = 'C:/HY-Data/LINDERIK/doria_harvest_testi/temp/log/'
 
+
 def main():
-	#url = "http://varia32-kk.lib.helsinki.fi/oai/request?verb=ListRecords&metadataPrefix=kk"
-	#page = str(get_url(url))
-	
-	items = oai_ListIdentifiers(URL_OAIBASE)
+    # url = "http://varia32-kk.lib.helsinki.fi/oai/request?verb=ListRecords&metadataPrefix=kk"
+    # page = str(get_url(url))
+    items = oai_ListIdentifiers(URL_OAIBASE)
 	print len(items)
 	
 	#iteritem?
@@ -83,3 +83,6 @@ if __name__ == '__main__':
 	logger.info('Project: ' + 'TESTING')
 	
 	main()
+
+
+#TEST linderik
