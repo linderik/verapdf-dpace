@@ -71,8 +71,6 @@ def parse_result():
         for assertion in assertions:
             msg = assertion.getElementsByTagName('message')[0].firstChild.nodeValue
             print "- " + msg
-
-
         return False
     else:
         print('Error: XML result tag not found!')
