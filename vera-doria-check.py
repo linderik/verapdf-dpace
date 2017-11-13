@@ -26,12 +26,13 @@ if args.dspace:
     if args.dspace == "doria":
         url = 'http://doria.fi/oai/request'
     else:
-        url = args.url
+        url = args.dspace
 else:
     sys.exit("please specify dspace installation url to be parsed")
 
 stats = dict()
 result = [0, 0]
+
 
 def get_file_list(id):
     kk = oai_GetRecord(url, id, 'kk')
