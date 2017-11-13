@@ -10,6 +10,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description="verapdf for dspace")
 parser.add_argument('-vera', action='store', dest='vera', help='path to vera-pdf installation folder')
+parser.add_argument('-dspace', action='store', dest='url', help='path to dspace installation to be parsed')
 args = parser.parse_args()
 print(args.vera)
 
@@ -21,11 +22,16 @@ if args.vera:
 else:
      sys.exit("please specify verapdf installation folder")
 
+if args.dspace:
+    if args.dspace == "doria":
+        url = 'http://doria.fi/oai/request'
+    else:
+        url = args.url
+else:
+    sys.exit("please specify dspace installation url to be parsed")
 
 stats = dict()
 result = [0, 0]
-url = 'http://doria.fi/oai/request' # The dspace to harvest. Modify as needed.
-
 
 def get_file_list(id):
     kk = oai_GetRecord(url, id, 'kk')
