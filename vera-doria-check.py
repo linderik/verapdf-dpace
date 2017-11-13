@@ -10,7 +10,8 @@ import argparse
 
 parser = argparse.ArgumentParser(description="verapdf for dspace")
 parser.add_argument('-vera', action='store', dest='vera', help='path to vera-pdf installation folder')
-
+args = parser.parse_args()
+print(args.vera)
 
 stats = dict()
 result = [0, 0]
