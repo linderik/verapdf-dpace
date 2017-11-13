@@ -18,11 +18,11 @@ if args.vera:
         vera = '/home/merioksa/Software/verapdf/verapdf'
      else:
          vera = args.vera
-else:
-    print("please specify verapdf installation folder")
-    sys.exit("please specify verapdf installation folder")
+ else:
+     print("please specify verapdf installation folder")
+     sys.exit("please specify verapdf installation folder")
 
-    
+
 stats = dict()
 result = [0, 0]
 url = 'http://doria.fi/oai/request' # The dspace to harvest. Modify as needed.
