@@ -6,6 +6,11 @@ from f_xml import *
 import xml.dom.minidom
 import subprocess
 import sys
+import argparse
+
+parser = argparse.ArgumentParser(description="verapdf for dspace")
+parser.add_argument('-vera', action='store', dest='vera', help='path to vera-pdf installation folder')
+
 
 stats = dict()
 result = [0, 0]
