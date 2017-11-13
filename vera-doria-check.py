@@ -13,10 +13,19 @@ parser.add_argument('-vera', action='store', dest='vera', help='path to vera-pdf
 args = parser.parse_args()
 print(args.vera)
 
+if args.vera:
+    if args.vera == merioksa:
+        vera = '/home/merioksa/Software/verapdf/verapdf'
+     else:
+         vera = args.vera
+else:
+    print("please specify verapdf installation folder")
+    sys.exit("please specify verapdf installation folder")
+
+    
 stats = dict()
 result = [0, 0]
 url = 'http://doria.fi/oai/request' # The dspace to harvest. Modify as needed.
-vera = '/home/merioksa/Software/verapdf/verapdf' # MODIFY THIS! Needs to point at the actual verapdf script
 
 
 def get_file_list(id):
