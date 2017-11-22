@@ -8,6 +8,7 @@ import codecs
 # create logger
 module_logger = logging.getLogger('harvest.filesys')
 
+
 def dir_exists(p_dir):
     # Check if directory exists.
     # p_dir = dir path
