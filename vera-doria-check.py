@@ -18,9 +18,11 @@ if args.vera:
     if args.vera == "merioksa":
         vera = '/home/merioksa/Software/verapdf/verapdf'
     else:
-         vera = args.vera
+        vera = args.vera
+elif os.path.isfile("./verapdf/verapdf"):
+    vera = "./verapdf/verapdf"
 else:
-     sys.exit("please specify verapdf installation folder")
+        sys.exit("please specify verapdf installation folder")
 
 if args.dspace:
     if args.dspace == "doria":
@@ -34,8 +36,8 @@ stats = dict()
 result = [0, 0]
 
 
-def get_file_list(id):
-    kk = oai_GetRecord(url, id, 'kk')
+def get_file_list(the_id):
+    kk = oai_GetRecord(url, the_id, 'kk')
     dom_kk = xml.dom.minidom.parseString(kk)
 
     return dom_kk.getElementsByTagName('kk:file')
