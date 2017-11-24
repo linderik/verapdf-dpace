@@ -22,7 +22,7 @@ if args.vera:
         vera = args.vera
 elif os.path.isfile("./verapdf/verapdf"):
     vera = "./verapdf/verapdf"
-    print(os.path.isfile("./verapdf/verapdf"))
+    # print(os.path.isfile("./verapdf/verapdf"))
 else:
         sys.exit("please specify verapdf installation folder")
 
@@ -36,8 +36,10 @@ else:
 
 if args.count > 0:
     count = args.count
+    print("limiting counter to"+count)
 else:
-    count = -1;
+    count = -1
+    print ("checking everything...")
 
 stats = dict()
 result = [0, 0]
