@@ -50,7 +50,7 @@ def get_tokenized_url(p_baseurl, p_verb, p_parameters, p_pages, p_n, p_max_rt=MA
     return
 
 
-def get_tokenized_url_nr(p_baseurl, p_verb, count):
+def get_tokenized_url_nr(p_baseurl, p_verb):
     # NON-Recursive function to loop through xml responses with resumptiontokens.
     # p_baseurl = base url of oai service
     # p_verb = oai request verb part
