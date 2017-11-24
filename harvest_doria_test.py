@@ -14,8 +14,8 @@ URL_OAIBASE = 'http://www.doria.fi/oai/request'
 # change!!!
 # DIR = 'C:\HY-Data\LINDERIK\doria_harvest_testi\temp\\'
 # DIR_LOGFILE = 'C:\HY-Data\LINDERIK\doria_harvest_testi\\temp\log\\'
-DIR = 'C:/HY-Data/LINDERIK/doria_harvest_testi/temp'
-DIR_LOGFILE = 'C:/HY-Data/LINDERIK/doria_harvest_testi/temp/log/'
+DIR = './'
+DIR_LOGFILE = './log.txt'
 
 
 def main():
@@ -80,7 +80,3 @@ if __name__ == '__main__':
     logger.info('Project: ' + 'TESTING')
 
     main()
-
-
-    # TEST linderik
-    # test 2 linderik
