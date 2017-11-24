@@ -139,7 +139,7 @@ def check_database():
         print counter
         print 'out of'
         print count
-        if counter == count:
+        if counter > count:
             print("Max number of iterations reached!")
             break
 
