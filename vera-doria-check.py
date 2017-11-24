@@ -36,7 +36,7 @@ else:
 
 if args.count > 0:
     count = args.count
-    print("limiting counter to"+count)
+    print("limiting counter to "+count)
 else:
     count = -1
     print ("checking everything...")
@@ -107,7 +107,7 @@ def check_database():
     counter = 0
 
     # Download all identifiers from dspace
-    items = oai_ListIdentifiers(url)  # The second (optional) argument is the collection or community id :-)
+    items = oai_ListIdentifiers(url, count)  # The second (optional) argument is the collection or community id :-)
     for orig_id, orig_ts in items.iteritems():
         print("===================================================================")
 

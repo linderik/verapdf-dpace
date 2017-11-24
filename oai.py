@@ -129,7 +129,7 @@ def oai_ListMetadataFormats(p_baseurl):
 
 # --
 
-def oai_ListIdentifiers(p_baseurl):
+def oai_ListIdentifiers(p_baseurl, count):
     # Gets all ID/timestamp pairs through ListIdentifiers queries.
     # p_baseurl = base url of oai service
 
@@ -143,6 +143,9 @@ def oai_ListIdentifiers(p_baseurl):
     id_list = []
     ds_list = []
     for page in pages:
+        count = count - 1
+        if count == 0:
+            break
         dom = xml.dom.minidom.parseString(page)
         for hnode in dom.getElementsByTagName('header'):
             id_list.append(hnode.getElementsByTagName('identifier')[0].childNodes[0].nodeValue)
