@@ -144,6 +144,7 @@ def oai_ListIdentifiers(p_baseurl, count):
     ds_list = []
     for page in pages:
         count = count - 1
+        print count
         if count == 0:
             break
         dom = xml.dom.minidom.parseString(page)
