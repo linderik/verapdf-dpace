@@ -50,14 +50,15 @@ def get_tokenized_url(p_baseurl, p_verb, p_parameters, p_pages, p_n, p_max_rt=MA
     return
 
 
-def get_tokenized_url_nr(p_baseurl, p_verb):
+def get_tokenized_url_nr(p_baseurl, p_verb, count):
     # NON-Recursive function to loop through xml responses with resumptiontokens.
     # p_baseurl = base url of oai service
     # p_verb = oai request verb part
     # p_parameters = parameters/resumptiontoken of oai request
     # p_pages = a list of contents of fetched urls
     # p_n = recursion counter to prevent inf. loops
-    # p_max_rt = p_n maximum allowed
+    #  = p_n maximum allowed
+
 
     pages_list = []
 
@@ -129,7 +130,7 @@ def oai_ListMetadataFormats(p_baseurl):
 
 # --
 
-def oai_ListIdentifiers(p_baseurl, count):
+def oai_ListIdentifiers(p_baseurl):
     # Gets all ID/timestamp pairs through ListIdentifiers queries.
     # p_baseurl = base url of oai service
 
@@ -143,10 +144,7 @@ def oai_ListIdentifiers(p_baseurl, count):
     id_list = []
     ds_list = []
     for page in pages:
-        count = count - 1
-        print count
-        if count == 0:
-            break
+
         dom = xml.dom.minidom.parseString(page)
         for hnode in dom.getElementsByTagName('header'):
             id_list.append(hnode.getElementsByTagName('identifier')[0].childNodes[0].nodeValue)
