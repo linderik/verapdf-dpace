@@ -11,6 +11,7 @@ import argparse
 parser = argparse.ArgumentParser(description="verapdf for dspace")
 parser.add_argument('-vera', action='store', dest='vera', help='path to vera-pdf installation folder')
 parser.add_argument('-dspace', action='store', dest='dspace', help='path to dspace installation to be parsed')
+parser.add_argument('-count', action='store', dest='count', help='limit ammount of files t ob checked')
 args = parser.parse_args()
 print(args.vera)
 
@@ -21,6 +22,7 @@ if args.vera:
         vera = args.vera
 elif os.path.isfile("./verapdf/verapdf"):
     vera = "./verapdf/verapdf"
+    print("default path ./verapdf/verapdf empty")
 else:
         sys.exit("please specify verapdf installation folder")
 
@@ -31,6 +33,11 @@ if args.dspace:
         url = args.dspace
 else:
     sys.exit("please specify dspace installation url to be parsed")
+
+if args.count > 0:
+    count = args.count
+else:
+    count = -1;
 
 stats = dict()
 result = [0, 0]
@@ -127,7 +134,7 @@ def check_database():
             print("No files found!")
 
         counter += 1
-        if counter == 50:
+        if counter == count:
             print("Max number of iterations reached!")
             break
 
