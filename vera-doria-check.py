@@ -136,6 +136,7 @@ def check_database():
             print("No files found!")
 
         counter += 1
+        print counter
         if counter == count:
             print("Max number of iterations reached!")
             break
