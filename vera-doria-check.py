@@ -22,7 +22,7 @@ if args.vera:
         vera = args.vera
 elif os.path.isfile("./verapdf/verapdf"):
     vera = "./verapdf/verapdf"
-    print("default path ./verapdf/verapdf empty")
+    print(os.path.isfile("./verapdf/verapdf"))
 else:
         sys.exit("please specify verapdf installation folder")
 
