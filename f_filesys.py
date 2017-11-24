@@ -3,11 +3,9 @@ import logging
 import shutil
 import os
 import time
-import codecs
 
 # create logger
 module_logger = logging.getLogger('harvest.filesys')
-
 
 
 def fs_copy(p_src, p_dest):
@@ -172,7 +170,6 @@ def write_file(p_contents, p_filename):
 
     return
 
-#--
 
 def delete_dir(p_dir):
     # p_dir = dir path
@@ -180,7 +177,6 @@ def delete_dir(p_dir):
     os.system("rm -rf '" + p_dir + "'")
 
     return
-
 
 
 def delete_incomplete(p_dir):
@@ -193,10 +189,6 @@ def delete_incomplete(p_dir):
             os.system("rm -rf '" + p_dir + '/' + os.path.basename(item_dir) + "'")
 
     return
-
-	
-	
-
 
 
 
